@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5f2">
+  <meta name="description" content="Explore an apartment stay website concept in English, Portuguese, French, Spanish, Russian and Arabic. Clearly marked demonstration booking flow.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Apartments | Website concept</title>
+  <link rel="preload" href="assets/dm-sans-regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/cormorant-regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('apartment-preview-theme')==='dark'?'dark':'light'}catch{}</script>
+  <script src="i18n.js" defer></script>
+  <script src="motion.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-text="nav.5">Skip to content</a>
+  <header class="site-header wrap">
+    <a href="#" class="brand" aria-label="The Apartments, home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><span data-brand>the apartments</span><small data-text="hero.4"></small></span></a>
+    <nav class="desktop-nav" aria-label="Main navigation"><a href="#apartments" data-text="nav.0"></a><a href="#about" data-text="nav.1"></a><a href="#information" data-text="nav.2"></a><a href="#faq" data-text="nav.3"></a></nav>
+    <div class="header-actions"><button id="theme-toggle" class="icon-button theme-toggle" aria-label="Switch to dark appearance" aria-pressed="false"><svg class="icon theme-moon" aria-hidden="true"><use href="assets/icons.svg#moon"></use></svg><svg class="icon theme-sun" aria-hidden="true"><use href="assets/icons.svg#sun"></use></svg></button><label class="language-control"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#world"></use></svg><select id="language" aria-label="Language"><option value="zh">中文 · 简体中文</option><option value="en">EN · English</option><option value="pt">PT · Português</option><option value="fr">FR · Français</option><option value="es">ES · Español</option><option value="ru">RU · Русский</option><option value="ar">AR · العربية</option></select></label><button class="button header-book" data-action="book" data-text="nav.4"></button></div>
+  </header>
+  <main id="main">
+    <section class="hero wrap">
+      <div class="hero-copy"><span class="hero-eyebrow" data-text="nav.0"></span><h1 data-text="hero.0"></h1><p data-text="hero.1"></p><a href="#apartments" class="text-link"><span data-text="hero.2"></span><span class="arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#arrow-up-right"></use></svg></span></a></div>
+      <figure class="hero-media"><div class="hero-image-frame"><img id="hero-image" src="assets/hero.webp" alt="" fetchpriority="high" width="1536" height="1024"><img id="hero-image-next" src="assets/hero.webp" alt="" aria-hidden="true" width="1536" height="1024"></div><figcaption><span data-text="hero.3"></span><span class="gallery-controls"><button id="previous-image" class="icon-button" aria-label="Previous image"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#arrow-left"></use></svg></button><span id="image-index" dir="ltr">01 / 03</span><button id="next-image" class="icon-button" aria-label="Next image"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#arrow-right"></use></svg></button></span></figcaption></figure>
+    </section>
+    <div class="finder-container wrap"><form id="finder" class="finder"><label><span data-text="finder.0"></span><select name="unit" id="finder-unit" required></select></label><label><span data-text="finder.2"></span><input name="arrival" id="finder-arrival" type="date" required></label><label><span data-text="finder.3"></span><input name="departure" id="finder-departure" type="date" required></label><label class="guests"><span data-text="finder.4"></span><input name="guests" id="finder-guests" type="number" min="1" step="1" value="2" required></label><button class="button finder-submit" type="submit"><span data-text="finder.5"></span><span class="arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#arrow-up-right"></use></svg></span></button></form><div class="finder-note"><span data-text="footer.3"></span><span data-text="finder.6"></span></div></div>
+    <section id="apartments" class="apartments wrap section-space"><div class="section-heading"><h2 data-text="rooms.0"></h2><p data-text="rooms.1"></p></div><div id="apartment-grid" class="apartment-grid"></div><div class="center"><button id="show-all" class="button button-outline"></button></div></section>
+    <section id="about" class="about wrap section-space"><div class="about-media"><img src="assets/detail.webp" loading="lazy" width="1536" height="1024" alt=""><small data-text="hero.3"></small></div><div class="about-copy"><span class="section-kicker" data-text="nav.1"></span><h2 data-text="story.0"></h2><p data-text="story.1"></p><p class="pending-copy" data-text="story.2"></p><a href="#information" class="text-link"><span data-text="nav.2"></span><span class="arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#arrow-up-right"></use></svg></span></a></div></section>
+    <section id="information" class="information wrap section-space"><div class="section-heading"><h2 data-text="info.0"></h2><p data-text="info.1"></p></div><div class="info-grid"><article><span class="info-symbol" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#map-pin"></use></svg></span><h3 data-text="info.2"></h3><p data-text="info.3"></p></article><article><span class="info-symbol" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#clock"></use></svg></span><h3 data-text="info.4"></h3><p data-text="info.5"></p></article><article><span class="info-symbol" aria-hidden="true"><svg class="icon"><use href="assets/icons.svg#credit-card"></use></svg></span><h3 data-text="info.6"></h3><p data-text="info.7"></p></article></div></section>
+    <section id="faq" class="faq wrap section-space"><h2 data-text="faq.0"></h2><div class="faq-list" id="faq-list"></div></section>
+  </main>
+  <footer class="wrap site-footer"><div class="footer-main"><a class="brand" href="#"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-brand>the apartments</span></a><div><h3 data-text="footer.0"></h3><p data-text="footer.1"></p></div><button id="policy-link" class="plain-link" data-text="footer.2"></button></div><div class="footer-bottom"><span data-text="footer.3"></span><span data-text="footer.4"></span></div></footer>
+  <dialog id="booking-dialog" aria-labelledby="booking-title"><div class="booking-shell"><header class="booking-header"><div><p class="booking-eyebrow" data-text="booking.0"></p><h2 id="booking-title" data-text="booking.1"></h2></div><button class="close-button" id="close-booking" type="button" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#x"></use></svg></button></header><ol id="booking-steps" class="booking-steps"></ol><div id="booking-body"></div></div></dialog>
+  <dialog id="policy-dialog" aria-labelledby="policy-title"><div class="policy-shell"><button class="close-button" id="close-policy" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#x"></use></svg></button><h2 id="policy-title" data-text="footer.2"></h2><p data-text="policy.0"></p><p data-text="policy.1"></p><p data-text="policy.2"></p></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
