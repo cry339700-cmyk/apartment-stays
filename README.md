@@ -19,13 +19,19 @@
 
 网页文件直接位于仓库根目录，发布源为 `main` 分支根目录。
 修改后提交并推送到 `main`，GitHub Pages 会自动构建并部署。
+导航指向独立 HTML 文档，直接访问或刷新子页均有效；链接携带所选语言，当前页导航会高亮。
 `.nojekyll` 用于按普通静态文件发布。本项目无需安装依赖或执行构建。
 
-- `index.html`：页面结构。
+- `index.html`：首页与精选公寓。
+- `apartments.html`：约 12 个单元的完整列表。
+- `about.html`：旅居理念。
+- `information.html`：入住须知与预订步骤。
+- `faq.html`：常见问题。
+- `scripts/build-pages.mjs`：生成上述五个 HTML 页面，共享导航、页脚与预订弹窗。修改后运行 `node scripts/build-pages.mjs`，再提交生成的 HTML。
 - `style.css`：视觉、响应式及 RTL。
 - `i18n.js`：七种语言内容。
 - `app.js`：预订演示与交互。
-- `motion.js`：点击和过渡动画。
+- `motion.js`：点击、滚动逐项浮现和过渡动画；尊重减少动态效果设置。
 - `assets/`：示意图片、字体和图标；第三方授权文本在 `assets/licenses/`。
 
 ## 本地预览

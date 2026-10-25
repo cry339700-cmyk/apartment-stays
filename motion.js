@@ -36,20 +36,38 @@
     if(event.detail===0){const target=event.target.closest('button,a.text-link,summary');if(target)pulse(target);}
   });
   let observer;
+  const show = node => {node.classList.add('is-visible');observer?.unobserve(node);};
   const reveal = () => {
-    if(reduced.matches || !('IntersectionObserver' in window))return;
-    document.documentElement.classList.add('motion-ready');
-    observer ??= new IntersectionObserver(entries=>{
-      for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target);}
-    },{threshold:.08,rootMargin:'0px 0px -20px 0px'});
-    const targets=document.querySelectorAll('.section-heading,.apartment-card,.about-media,.about-copy,.info-grid article,.faq>h2,.faq-list,.footer-main');
-    targets.forEach((node,index)=>{
-      if(node.classList.contains('reveal'))return;
-      node.classList.add('reveal');
-      node.style.setProperty('--reveal-delay',node.matches('.apartment-card')?(index%3)*65+'ms':'0ms');
-      observer.observe(node);
-    });
+    const targets=document.querySelectorAll('[data-reveal],.apartment-card,.faq-list details');
+    if(reduced.matches || !('IntersectionObserver' in window)) {
+      observer?.disconnect();
+      document.documentElement.classList.remove('motion-ready');
+      targets.forEach(show);
+      return;
+    }
+    try {
+      observer ??= new IntersectionObserver(entries=>{
+        for(const entry of entries)if(entry.isIntersecting)show(entry.target);
+      },{threshold:.12,rootMargin:'0px 0px -48px 0px'});
+      document.documentElement.classList.add('motion-ready');
+      for(const node of targets){
+        if(node.classList.contains('reveal'))continue;
+        node.classList.add('reveal');
+        const siblings=[...node.parentElement.children];
+        const order=node.matches('.apartment-card')?siblings.indexOf(node)%3:node.matches('.faq-list details,.journey-steps li')?siblings.indexOf(node)%3:0;
+        node.style.setProperty('--reveal-delay',`${Number(node.dataset.revealDelay)||order*110}ms`);
+        observer.observe(node);
+      }
+    } catch {
+      // Content remains available if a browser does not support observation.
+      document.documentElement.classList.remove('motion-ready');
+      targets.forEach(show);
+    }
   };
+  reduced.addEventListener('change',reveal);
+  document.addEventListener('focusin',event=>{
+    const target=event.target.closest('.reveal');if(target)show(target);
+  });
   const openDialog = dialog => run(dialog,[{opacity:0,transform:'translateY(20px) scale(.985)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:460});
   const closeDialog = (dialog,done) => {
     if(dialog.classList.contains('is-closing'))return;

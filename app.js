@@ -13,7 +13,8 @@
   let stored = null;
   try { stored = localStorage.getItem('apartment-preview-language'); } catch {}
   let lang = locales.includes(requested) ? requested : locales.includes(stored) ? stored : 'en';
-  let expanded = false;
+  const page = document.body.dataset.page || 'index';
+  let expanded = page === 'apartments';
   let imageIndex = 0;
   let step = 0;
   let lastTrigger = null;
@@ -66,8 +67,9 @@
     if (!/^\d+$/.test(state.guests) || !Number.isSafeInteger(Number(state.guests)) || Number(state.guests)<1) return t('dates',3);
     return '';
   };
-  const finderState = () => ({unit:$('#finder-unit').value,arrival:$('#finder-arrival').value,departure:$('#finder-departure').value,guests:$('#finder-guests').value});
+  const finderState = () => !$('#finder') ? {} : ({unit:$('#finder-unit').value,arrival:$('#finder-arrival').value,departure:$('#finder-departure').value,guests:$('#finder-guests').value});
   const syncFinder = () => {
+    if (!$('#finder')) return;
     $('#finder-unit').innerHTML=`<option value="">${escape(t('finder',1))}</option>`+Array.from({length:12},(_,i)=>`<option value="${i+1}">${escape(unitLabel(i+1))}</option>`).join('');
     $('#finder-unit').value=state.unit;
     $('#finder-arrival').value=state.arrival;$('#finder-departure').value=state.departure;$('#finder-guests').value=state.guests;
@@ -75,16 +77,20 @@
     for(const [id,index] of [['finder-unit',0],['finder-arrival',2],['finder-departure',3],['finder-guests',4]]) $('#'+id).setAttribute('aria-label',t('finder',index));
   };
   const renderRooms = () => {
+    if (!$('#apartment-grid')) return;
     $('#apartment-grid').innerHTML=Array.from({length:expanded?12:3},(_,i)=>{
       const unit=i+1;
       return `<article class="apartment-card"><a href="#reserve-${unit}" class="apartment-photo" data-unit="${unit}" aria-label="${escape(unitLabel(unit)+' / '+t('rooms',3))}"><img src="assets/${imageFor(unit)}.webp" loading="lazy" width="1536" height="1024" alt="${escape(t('hero',3))}"></a><div class="room-heading"><h3>${escape(unitLabel(unit))}</h3><span class="room-index" dir="ltr">${String(unit).padStart(2,'0')} / 12</span></div><p class="room-meta">${escape(t('rooms',6))}</p><div class="room-bottom"><span class="room-price">${escape(t('rooms',7))}</span><button class="room-button" data-unit="${unit}"><span>${escape(t('rooms',3))}</span><span class="arrow">${icon('arrow-up-right')}</span></button></div></article>`;
     }).join('');
-    $('#show-all').textContent=t('rooms',expanded?5:4);
-    $('#show-all').setAttribute('aria-expanded',String(expanded));
-    $('#show-all').setAttribute('aria-controls','apartment-grid');
+    if ($('#show-all')) {
+      $('#show-all').textContent=t('rooms',expanded?5:4);
+      $('#show-all').setAttribute('aria-expanded',String(expanded));
+      $('#show-all').setAttribute('aria-controls','apartment-grid');
+    }
     motion?.refresh();
   };
   const renderFaq = () => {
+    if (!$('#faq-list')) return;
     $('#faq-list').innerHTML=[1,3,5,7].map(i=>`<details><summary>${escape(t('faq',i))}</summary><p>${escape(t('faq',i+1))}</p></details>`).join('');
   };
   const notice = () => `<p class="notice">${escape(t('booking',2))}</p>`;
@@ -130,9 +136,16 @@
     $('#language').setAttribute('aria-label',lang==='zh'?'界面语言':'Language');
     updateThemeLabel();
     $('#close-booking').setAttribute('aria-label',t('booking',5));$('#close-policy').setAttribute('aria-label',t('booking',5));
-    $('#hero-image').alt=t('hero',3);$('.about-media img').alt=t('hero',3);
-    $('#previous-image').setAttribute('aria-label',t('booking',3));$('#next-image').setAttribute('aria-label',t('booking',4));
-    document.title=lang==='zh'?'公寓旅居｜中文界面预览':`${t('rooms',2)} | ${t('footer',3)}`;
+    for (const image of $$('[data-concept-image],#hero-image')) image.alt=t('hero',3);
+    $('#previous-image')?.setAttribute('aria-label',t('booking',3));$('#next-image')?.setAttribute('aria-label',t('booking',4));
+    const pageIndex={apartments:0,about:1,information:2,faq:3}[page];
+    const pageTitle=page==='index' ? t('pages',0) : t('nav',pageIndex);
+    document.title=`${pageTitle} | ${lang==='zh'?'公寓旅居':'The Apartments'}`;
+    for(const anchor of $$('[data-page-link]')){
+      const target=anchor.dataset.pageLink;
+      anchor.setAttribute('href',`${target}.html?lang=${lang}`);
+      if(target===page)anchor.setAttribute('aria-current','page');else anchor.removeAttribute('aria-current');
+    }
     syncFinder();renderRooms();renderFaq();if($('#booking-dialog').open)renderBooking();
     motion?.refresh();
   };
@@ -155,8 +168,8 @@
     const next=new URL(location.href);next.searchParams.set('lang',lang);history.replaceState(null,'',next);
     translate();
   });
-  $('#finder-arrival').addEventListener('change',()=>{$('#finder-departure').min=$('#finder-arrival').value||today();});
-  $('#finder').addEventListener('submit',event=>{
+  $('#finder-arrival')?.addEventListener('change',()=>{$('#finder-departure').min=$('#finder-arrival').value||today();});
+  $('#finder')?.addEventListener('submit',event=>{
     event.preventDefault();setStay(finderState());
     const message=validStay();if(message){toast(message);return;}
     openBooking('',2);
@@ -166,9 +179,9 @@
     if(unit){event.preventDefault();setStay(finderState());openBooking(unit.dataset.unit,1);return;}
     if(event.target.closest('[data-action="book"]')){setStay(finderState());openBooking('',0);}
   });
-  $('#show-all').addEventListener('click',()=>{expanded=!expanded;renderRooms();});
+  $('#show-all')?.addEventListener('click',()=>{expanded=!expanded;renderRooms();});
   const cycle = async delta => {if(galleryBusy)return;galleryBusy=true;imageIndex=(imageIndex+delta+images.length)%images.length;$('#image-index').textContent=`0${imageIndex+1} / 03`;try{if(motion)await motion.gallery($('#hero-image'),$('#hero-image-next'),`assets/${images[imageIndex]}.webp`);else $('#hero-image').src=`assets/${images[imageIndex]}.webp`;}finally{galleryBusy=false;}};
-  $('#previous-image').addEventListener('click',()=>cycle(-1));$('#next-image').addEventListener('click',()=>cycle(1));
+  $('#previous-image')?.addEventListener('click',()=>cycle(-1));$('#next-image')?.addEventListener('click',()=>cycle(1));
   $('#close-booking').addEventListener('click',closeBooking);
   $('#booking-dialog').addEventListener('cancel',event=>{event.preventDefault();closeBooking();});
   $('#booking-dialog').addEventListener('click',event=>{
