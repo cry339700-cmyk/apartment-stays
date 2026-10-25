@@ -1,0 +1,1 @@
+{"name":"apartment-booking-api","private":true,"version":"1.0.0","type":"module","engines":{"node":">=24.0.0"},"scripts":{"start":"node --env-file-if-exists=.env index.mjs","test":"node --test ../tests/commerce.test.mjs"},"dependencies":{"stripe":"23.0.0"}}
